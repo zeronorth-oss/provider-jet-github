@@ -1,0 +1,10 @@
+apiVersion: team.github.jet.crossplane.io/v1alpha1
+kind: Team
+metadata:
+  name: test-team
+spec:
+  forProvider:
+    name: test-team
+    privacy: closed
+  providerConfigRef:
+    name: github-provider-config

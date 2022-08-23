@@ -1,0 +1,12 @@
+apiVersion: team.github.jet.crossplane.io/v1alpha1
+kind: TeamRepository
+metadata:
+  name: hello-crossplane
+spec:
+  forProvider:
+    repositoryRef:
+      name: hello-crossplane
+    teamIdRef:
+      name: test-team
+  providerConfigRef:
+    name: github-provider-config

@@ -21,16 +21,24 @@ import (
 
 	"github.com/crossplane/terrajet/pkg/controller"
 
-	resource "github.com/crossplane-contrib/provider-jet-template/internal/controller/null/resource"
-	providerconfig "github.com/crossplane-contrib/provider-jet-template/internal/controller/providerconfig"
+	membership "github.com/joakimhew/provider-jet-github/internal/controller/membership/membership"
+	providerconfig "github.com/joakimhew/provider-jet-github/internal/controller/providerconfig"
+	repository "github.com/joakimhew/provider-jet-github/internal/controller/repository/repository"
+	members "github.com/joakimhew/provider-jet-github/internal/controller/team/members"
+	team "github.com/joakimhew/provider-jet-github/internal/controller/team/team"
+	teamrepository "github.com/joakimhew/provider-jet-github/internal/controller/team/teamrepository"
 )
 
 // Setup creates all controllers with the supplied logger and adds them to
 // the supplied manager.
 func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
-		resource.Setup,
+		membership.Setup,
 		providerconfig.Setup,
+		repository.Setup,
+		members.Setup,
+		team.Setup,
+		teamrepository.Setup,
 	} {
 		if err := setup(mgr, o); err != nil {
 			return err

@@ -20,15 +20,18 @@ import (
 	// Note(turkenh): we are importing this to embed provider schema document
 	_ "embed"
 
-	tjconfig "github.com/crossplane/terrajet/pkg/config"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/joakimhew/provider-jet-github/config/membership"
+	"github.com/joakimhew/provider-jet-github/config/repository"
+	"github.com/joakimhew/provider-jet-github/config/team"
 
-	"github.com/crossplane-contrib/provider-jet-template/config/null"
+	tjconfig "github.com/crossplane/terrajet/pkg/config"
+	teamrepository "github.com/joakimhew/provider-jet-github/config/team_repository"
 )
 
 const (
-	resourcePrefix = "template"
-	modulePath     = "github.com/crossplane-contrib/provider-jet-template"
+	resourcePrefix = "github"
+	modulePath     = "github.com/joakimhew/provider-jet-github"
 )
 
 //go:embed schema.json
@@ -44,11 +47,20 @@ func GetProvider() *tjconfig.Provider {
 	}
 
 	pc := tjconfig.NewProviderWithSchema([]byte(providerSchema), resourcePrefix, modulePath,
-		tjconfig.WithDefaultResourceFn(defaultResourceFn))
+		tjconfig.WithDefaultResourceFn(defaultResourceFn),
+		tjconfig.WithIncludeList([]string{
+			"github_membership$",
+			"github_team$",
+			"github_repository$",
+			"github_team_repository$",
+			"github_team_members$",
+		}))
 
 	for _, configure := range []func(provider *tjconfig.Provider){
-		// add custom config functions
-		null.Configure,
+		membership.Configure,
+		team.Configure,
+		repository.Configure,
+		teamrepository.Configure,
 	} {
 		configure(pc)
 	}

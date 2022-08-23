@@ -1,0 +1,12 @@
+apiVersion: membership.github.jet.crossplane.io/v1alpha1
+kind: Membership
+metadata:
+  name: zntestjoakim
+  annotations:
+    email: joakim.hansson.test@zeronorth.com
+spec:
+  forProvider:
+    username: zntestjoakim
+    role: member
+  providerConfigRef:
+    name: github-provider-config
