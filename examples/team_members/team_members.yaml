@@ -1,0 +1,13 @@
+apiVersion: team.github.jet.crossplane.io/v1alpha1
+kind: TeamMembers
+metadata:
+  name: hello-crossplane
+spec:
+  forProvider:
+    teamIdRef:
+      name: test-team
+    members:
+      - username: joakimhew
+        role: maintainer
+  providerConfigRef:
+    name: github-provider-config

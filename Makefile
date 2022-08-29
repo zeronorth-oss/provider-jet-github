@@ -51,7 +51,7 @@ GO111MODULE = on
 # ====================================================================================
 # Setup Images
 
-DOCKER_REGISTRY ?= crossplane
+DOCKER_REGISTRY ?= joakimhew
 IMAGES = provider-jet-github provider-jet-github-controller
 -include build/makelib/image.mk
 

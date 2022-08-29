@@ -24,8 +24,10 @@ import (
 	"github.com/joakimhew/provider-jet-github/config/membership"
 	"github.com/joakimhew/provider-jet-github/config/repository"
 	"github.com/joakimhew/provider-jet-github/config/team"
+	teammembership "github.com/joakimhew/provider-jet-github/config/team_membership"
 
 	tjconfig "github.com/crossplane/terrajet/pkg/config"
+	teammembers "github.com/joakimhew/provider-jet-github/config/team_members"
 	teamrepository "github.com/joakimhew/provider-jet-github/config/team_repository"
 )
 
@@ -54,6 +56,7 @@ func GetProvider() *tjconfig.Provider {
 			"github_repository$",
 			"github_team_repository$",
 			"github_team_members$",
+			"github_team_membership$",
 		}))
 
 	for _, configure := range []func(provider *tjconfig.Provider){
@@ -61,6 +64,8 @@ func GetProvider() *tjconfig.Provider {
 		team.Configure,
 		repository.Configure,
 		teamrepository.Configure,
+		teammembers.Configure,
+		teammembership.Configure,
 	} {
 		configure(pc)
 	}

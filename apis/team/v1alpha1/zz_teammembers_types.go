@@ -25,10 +25,10 @@ import (
 	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 )
 
-type MembersMembersObservation struct {
+type MembersObservation struct {
 }
 
-type MembersMembersParameters struct {
+type MembersParameters struct {
 
 	// +kubebuilder:validation:Optional
 	Role *string `json:"role,omitempty" tf:"role,omitempty"`
@@ -37,66 +37,73 @@ type MembersMembersParameters struct {
 	Username *string `json:"username" tf:"username,omitempty"`
 }
 
-type MembersObservation struct {
+type TeamMembersObservation struct {
 	Etag *string `json:"etag,omitempty" tf:"etag,omitempty"`
 
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 }
 
-type MembersParameters struct {
+type TeamMembersParameters struct {
 
 	// +kubebuilder:validation:Required
-	Members []MembersMembersParameters `json:"members" tf:"members,omitempty"`
+	Members []MembersParameters `json:"members" tf:"members,omitempty"`
 
-	// +kubebuilder:validation:Required
-	TeamID *string `json:"teamId" tf:"team_id,omitempty"`
+	// +crossplane:generate:reference:type=github.com/joakimhew/provider-jet-github/apis/team/v1alpha1.Team
+	// +kubebuilder:validation:Optional
+	TeamID *string `json:"teamId,omitempty" tf:"team_id,omitempty"`
+
+	// +kubebuilder:validation:Optional
+	TeamIDRef *v1.Reference `json:"teamIdRef,omitempty" tf:"-"`
+
+	// +kubebuilder:validation:Optional
+	TeamIDSelector *v1.Selector `json:"teamIdSelector,omitempty" tf:"-"`
 }
 
-// MembersSpec defines the desired state of Members
-type MembersSpec struct {
+// TeamMembersSpec defines the desired state of TeamMembers
+type TeamMembersSpec struct {
 	v1.ResourceSpec `json:",inline"`
-	ForProvider     MembersParameters `json:"forProvider"`
+	ForProvider     TeamMembersParameters `json:"forProvider"`
 }
 
-// MembersStatus defines the observed state of Members.
-type MembersStatus struct {
+// TeamMembersStatus defines the observed state of TeamMembers.
+type TeamMembersStatus struct {
 	v1.ResourceStatus `json:",inline"`
-	AtProvider        MembersObservation `json:"atProvider,omitempty"`
+	AtProvider        TeamMembersObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 
-// Members is the Schema for the Memberss API
+// TeamMembers is the Schema for the TeamMemberss API
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:subresource:status
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,githubjet}
-type Members struct {
+type TeamMembers struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              MembersSpec   `json:"spec"`
-	Status            MembersStatus `json:"status,omitempty"`
+	Spec              TeamMembersSpec   `json:"spec"`
+	Status            TeamMembersStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 
-// MembersList contains a list of Memberss
-type MembersList struct {
+// TeamMembersList contains a list of TeamMemberss
+type TeamMembersList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Members `json:"items"`
+	Items           []TeamMembers `json:"items"`
 }
 
 // Repository type metadata.
 var (
-	Members_Kind             = "Members"
-	Members_GroupKind        = schema.GroupKind{Group: CRDGroup, Kind: Members_Kind}.String()
-	Members_KindAPIVersion   = Members_Kind + "." + CRDGroupVersion.String()
-	Members_GroupVersionKind = CRDGroupVersion.WithKind(Members_Kind)
+	TeamMembers_Kind             = "TeamMembers"
+	TeamMembers_GroupKind        = schema.GroupKind{Group: CRDGroup, Kind: TeamMembers_Kind}.String()
+	TeamMembers_KindAPIVersion   = TeamMembers_Kind + "." + CRDGroupVersion.String()
+	TeamMembers_GroupVersionKind = CRDGroupVersion.WithKind(TeamMembers_Kind)
 )
 
 func init() {
-	SchemeBuilder.Register(&Members{}, &MembersList{})
+	SchemeBuilder.Register(&TeamMembers{}, &TeamMembersList{})
 }

@@ -99,18 +99,18 @@ func (tr *Team) GetTerraformSchemaVersion() int {
 	return 0
 }
 
-// GetTerraformResourceType returns Terraform resource type for this Members
-func (mg *Members) GetTerraformResourceType() string {
+// GetTerraformResourceType returns Terraform resource type for this TeamMembers
+func (mg *TeamMembers) GetTerraformResourceType() string {
 	return "github_team_members"
 }
 
-// GetConnectionDetailsMapping for this Members
-func (tr *Members) GetConnectionDetailsMapping() map[string]string {
+// GetConnectionDetailsMapping for this TeamMembers
+func (tr *TeamMembers) GetConnectionDetailsMapping() map[string]string {
 	return nil
 }
 
-// GetObservation of this Members
-func (tr *Members) GetObservation() (map[string]interface{}, error) {
+// GetObservation of this TeamMembers
+func (tr *TeamMembers) GetObservation() (map[string]interface{}, error) {
 	o, err := json.TFParser.Marshal(tr.Status.AtProvider)
 	if err != nil {
 		return nil, err
@@ -119,8 +119,8 @@ func (tr *Members) GetObservation() (map[string]interface{}, error) {
 	return base, json.TFParser.Unmarshal(o, &base)
 }
 
-// SetObservation for this Members
-func (tr *Members) SetObservation(obs map[string]interface{}) error {
+// SetObservation for this TeamMembers
+func (tr *TeamMembers) SetObservation(obs map[string]interface{}) error {
 	p, err := json.TFParser.Marshal(obs)
 	if err != nil {
 		return err
@@ -128,16 +128,16 @@ func (tr *Members) SetObservation(obs map[string]interface{}) error {
 	return json.TFParser.Unmarshal(p, &tr.Status.AtProvider)
 }
 
-// GetID returns ID of underlying Terraform resource of this Members
-func (tr *Members) GetID() string {
+// GetID returns ID of underlying Terraform resource of this TeamMembers
+func (tr *TeamMembers) GetID() string {
 	if tr.Status.AtProvider.ID == nil {
 		return ""
 	}
 	return *tr.Status.AtProvider.ID
 }
 
-// GetParameters of this Members
-func (tr *Members) GetParameters() (map[string]interface{}, error) {
+// GetParameters of this TeamMembers
+func (tr *TeamMembers) GetParameters() (map[string]interface{}, error) {
 	p, err := json.TFParser.Marshal(tr.Spec.ForProvider)
 	if err != nil {
 		return nil, err
@@ -146,8 +146,8 @@ func (tr *Members) GetParameters() (map[string]interface{}, error) {
 	return base, json.TFParser.Unmarshal(p, &base)
 }
 
-// SetParameters for this Members
-func (tr *Members) SetParameters(params map[string]interface{}) error {
+// SetParameters for this TeamMembers
+func (tr *TeamMembers) SetParameters(params map[string]interface{}) error {
 	p, err := json.TFParser.Marshal(params)
 	if err != nil {
 		return err
@@ -155,10 +155,10 @@ func (tr *Members) SetParameters(params map[string]interface{}) error {
 	return json.TFParser.Unmarshal(p, &tr.Spec.ForProvider)
 }
 
-// LateInitialize this Members using its observed tfState.
+// LateInitialize this TeamMembers using its observed tfState.
 // returns True if there are any spec changes for the resource.
-func (tr *Members) LateInitialize(attrs []byte) (bool, error) {
-	params := &MembersParameters{}
+func (tr *TeamMembers) LateInitialize(attrs []byte) (bool, error) {
+	params := &TeamMembersParameters{}
 	if err := json.TFParser.Unmarshal(attrs, params); err != nil {
 		return false, errors.Wrap(err, "failed to unmarshal Terraform state parameters for late-initialization")
 	}
@@ -169,7 +169,81 @@ func (tr *Members) LateInitialize(attrs []byte) (bool, error) {
 }
 
 // GetTerraformSchemaVersion returns the associated Terraform schema version
-func (tr *Members) GetTerraformSchemaVersion() int {
+func (tr *TeamMembers) GetTerraformSchemaVersion() int {
+	return 0
+}
+
+// GetTerraformResourceType returns Terraform resource type for this TeamMembership
+func (mg *TeamMembership) GetTerraformResourceType() string {
+	return "github_team_membership"
+}
+
+// GetConnectionDetailsMapping for this TeamMembership
+func (tr *TeamMembership) GetConnectionDetailsMapping() map[string]string {
+	return nil
+}
+
+// GetObservation of this TeamMembership
+func (tr *TeamMembership) GetObservation() (map[string]interface{}, error) {
+	o, err := json.TFParser.Marshal(tr.Status.AtProvider)
+	if err != nil {
+		return nil, err
+	}
+	base := map[string]interface{}{}
+	return base, json.TFParser.Unmarshal(o, &base)
+}
+
+// SetObservation for this TeamMembership
+func (tr *TeamMembership) SetObservation(obs map[string]interface{}) error {
+	p, err := json.TFParser.Marshal(obs)
+	if err != nil {
+		return err
+	}
+	return json.TFParser.Unmarshal(p, &tr.Status.AtProvider)
+}
+
+// GetID returns ID of underlying Terraform resource of this TeamMembership
+func (tr *TeamMembership) GetID() string {
+	if tr.Status.AtProvider.ID == nil {
+		return ""
+	}
+	return *tr.Status.AtProvider.ID
+}
+
+// GetParameters of this TeamMembership
+func (tr *TeamMembership) GetParameters() (map[string]interface{}, error) {
+	p, err := json.TFParser.Marshal(tr.Spec.ForProvider)
+	if err != nil {
+		return nil, err
+	}
+	base := map[string]interface{}{}
+	return base, json.TFParser.Unmarshal(p, &base)
+}
+
+// SetParameters for this TeamMembership
+func (tr *TeamMembership) SetParameters(params map[string]interface{}) error {
+	p, err := json.TFParser.Marshal(params)
+	if err != nil {
+		return err
+	}
+	return json.TFParser.Unmarshal(p, &tr.Spec.ForProvider)
+}
+
+// LateInitialize this TeamMembership using its observed tfState.
+// returns True if there are any spec changes for the resource.
+func (tr *TeamMembership) LateInitialize(attrs []byte) (bool, error) {
+	params := &TeamMembershipParameters{}
+	if err := json.TFParser.Unmarshal(attrs, params); err != nil {
+		return false, errors.Wrap(err, "failed to unmarshal Terraform state parameters for late-initialization")
+	}
+	opts := []resource.GenericLateInitializerOption{resource.WithZeroValueJSONOmitEmptyFilter(resource.CNameWildcard)}
+
+	li := resource.NewGenericLateInitializer(opts...)
+	return li.LateInitialize(&tr.Spec.ForProvider, params)
+}
+
+// GetTerraformSchemaVersion returns the associated Terraform schema version
+func (tr *TeamMembership) GetTerraformSchemaVersion() int {
 	return 0
 }
 
