@@ -1,13 +1,24 @@
 apiVersion: team.github.jet.crossplane.io/v1alpha1
+kind: Team
+metadata:
+  name: test-team-2
+spec:
+  forProvider:
+    name: test-team-2
+    privacy: closed
+  providerConfigRef:
+    name: github-provider-config
+---
+apiVersion: team.github.jet.crossplane.io/v1alpha1
 kind: TeamMembers
 metadata:
-  name: hello-crossplane
+  name: test-team-2-members
 spec:
   forProvider:
     teamIdRef:
-      name: test-team
+      name: test-team-2
     members:
-      - username: joakimhew
-        role: maintainer
+      - role: member
+        username: joakimhew
   providerConfigRef:
     name: github-provider-config

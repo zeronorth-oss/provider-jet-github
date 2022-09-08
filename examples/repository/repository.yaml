@@ -3,6 +3,7 @@ kind: Repository
 metadata:
   name: hello-crossplane
 spec:
+  deletionPolicy: Orphan
   forProvider:
     visibility: private
   providerConfigRef:

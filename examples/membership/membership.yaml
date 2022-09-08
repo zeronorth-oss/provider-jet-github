@@ -3,10 +3,12 @@ kind: Membership
 metadata:
   name: zntestjoakim
   annotations:
-    email: joakim.hansson.test@zeronorth.com
+    email: joakim.hansson@zeronorth.com
+    crossplane.io/external-name: 0north:zntestjoakim
 spec:
+  deletionPolicy: Orphan
   forProvider:
-    username: zntestjoakim
     role: member
+    username: zntestjoakim
   providerConfigRef:
     name: github-provider-config
